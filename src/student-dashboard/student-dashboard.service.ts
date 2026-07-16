@@ -6,19 +6,16 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class StudentDashboardService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
 
   async getStudentQuizzes(studentId: string): Promise<QuizDashboardResponseDto[]> {
-    // Fetch all quizzes from Postgres!
     const quizzes = await this.prisma.quiz.findMany();
-    
-    // Map them to the DTO contract expected by the frontend
+
     return quizzes.map(q => ({
       quizId: q.id,
       quizName: q.title,
       duration: q.duration,
       closedTime: q.closeDate,
-      // Default state since we haven't built the Attempt table yet
       studentState: 'Not started',
     }));
   }
