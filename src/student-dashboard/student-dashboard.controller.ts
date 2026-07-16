@@ -5,7 +5,12 @@ import { UpdateStudentDashboardDto } from './dto/update-student-dashboard.dto';
 
 @Controller('student-dashboard')
 export class StudentDashboardController {
-  constructor(private readonly studentDashboardService: StudentDashboardService) {}
+  constructor(private readonly studentDashboardService: StudentDashboardService) { }
+
+  @Get(':studentId/quizzes')
+  getQuizzes(@Param('studentId') studentId: string) {
+    return this.studentDashboardService.getStudentQuizzes(studentId);
+  }
 
   @Post()
   create(@Body() createStudentDashboardDto: CreateStudentDashboardDto) {
@@ -14,6 +19,7 @@ export class StudentDashboardController {
 
   @Get()
   findAll() {
+
     return this.studentDashboardService.findAll();
   }
 

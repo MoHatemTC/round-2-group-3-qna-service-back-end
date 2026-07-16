@@ -2,19 +2,25 @@ import { Injectable } from '@nestjs/common';
 import { CreateStudentDashboardDto } from './dto/create-student-dashboard.dto';
 import { UpdateStudentDashboardDto } from './dto/update-student-dashboard.dto';
 import { QuizDashboardResponseDto } from './dto/quiz-dashboard-response.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class StudentDashboardService {
-  // mock data
-  private studentQuizzes: QuizDashboardResponseDto[] = [
-    { quizId: '123', quizName: 'Intro to REact', duration: 50, closedTime: new Date('2026-07-18T22:00:00'), studentState:  },
-    { quizId: '124', quizName: 'Data Structures', duration: 50, closedTime: new Date('2026-07-18T22:00:00'), studentState: '' },
-    { quizId: '125', quizName: 'Algorithms', duration: 50, closedTime: new Date('2026-07-18T22:00:00'), studentState: '' },
-  ];
+  constructor(private prisma: PrismaService) {}
 
-  getStudentQuizzes(studentId: string): QuizDashboardResponseDto[] {
-
-    return this.studentQuizzes;
+  async getStudentQuizzes(studentId: string): Promise<QuizDashboardResponseDto[]> {
+    // Fetch all quizzes from Postgres!
+    const quizzes = await this.prisma.quiz.findMany();
+    
+    // Map them to the DTO contract expected by the frontend
+    return quizzes.map(q => ({
+      quizId: q.id,
+      quizName: q.title,
+      duration: q.duration,
+      closedTime: q.closeDate,
+      // Default state since we haven't built the Attempt table yet
+      studentState: 'Not started',
+    }));
   }
 
   create(createStudentDashboardDto: CreateStudentDashboardDto) {
