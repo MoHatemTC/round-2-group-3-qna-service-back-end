@@ -21,11 +21,3 @@ model Quiz {
   closeDate   DateTime
 }
 
-model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  role      String   @default("student")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
