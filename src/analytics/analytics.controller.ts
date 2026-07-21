@@ -1,15 +1,13 @@
-// src/analytics/analytics.controller.ts
-
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { AnalyticsService } from './analytics.service';
-import type { QuizAnalyticsInput, CoreCardsOutput } from './analytics.types';
-
+import { JwtAuthGuard } from '../auth/guards/jwt-auth/jwt-auth.guard';
 @Controller('analytics')
+@UseGuards(JwtAuthGuard) 
 export class AnalyticsController {
   constructor(private readonly analyticsService: AnalyticsService) {}
 
-  @Post('core-cards')
-  getCoreCards(@Body() quizData: QuizAnalyticsInput): CoreCardsOutput {
-    return this.analyticsService.getCoreCards(quizData);
+  @Get('core-cards/:quizId')
+  async getCoreCards(@Param('quizId') quizId: string) {
+    return this.analyticsService.getCoreCards(quizId);
   }
 }
