@@ -1,28 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import * as bcrypt from 'bcrypt';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { RegisterDto } from './dto/register.dto';
 
 @Injectable()
-export class AuthService {
-  constructor(private prisma: PrismaService) {}
+export class AnalyticsService {
+  constructor(private readonly prisma: PrismaService) {}
 
-  async register(dto: RegisterDto) {
-    const hashedPassword = await bcrypt.hash(dto.password, 12);
-
-    const user = await this.prisma.user.create({
-      data: {
-        email: dto.email,
-        password: hashedPassword,
-        role: 'student',
-      },
-      select: {
-        id: true,
-        email: true,
-        role: true,
+  async calculateCoreCards(quizId: string) {
+    const quiz = await this.prisma.quiz.findUnique({
+      where: { id: quizId },
+      include: {
+       
       },
     });
 
-    return user;
+    if (!quiz) {
+      throw new NotFoundException('Quiz not found');
+    }
+
+    return {
+      invited: 0,
+      started: 0,
+      submitted: 0,
+      completionRate: "No attempts recorded yet",
+      averageScore: "No attempts recorded yet"
+    };
   }
 }

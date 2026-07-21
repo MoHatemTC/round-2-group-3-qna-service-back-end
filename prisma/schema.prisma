@@ -4,30 +4,42 @@
 // Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
-  provider   = "prisma-client-js"
-  engineType = "library"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
- //  url      = env("DATABASE_URL")
- // directUrl = env("DATABASE_URL")
+  url      = env("DATABASE_URL)
 }
 
 model Quiz {
-  id          String   @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   description String?
   duration    Int
   openDate    DateTime
   closeDate   DateTime
+  attempts    Attempt[]
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   password  String
-  role      String   @default("student")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      String    @default("student")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  attempts  Attempt[]
+}
+
+model Attempt {
+  id          String    @id @default(uuid())
+  quizId      String
+  quiz        Quiz      @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status      String    @default("STARTED")
+  score       Float?
+  submittedAt DateTime?
+  createdAt   DateTime  @default(now())
 }
