@@ -97,3 +97,74 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 
+
+
+
+# Q&A Service - Backend
+
+Backend service built with **NestJS**, **Prisma ORM**, and **PostgreSQL** for managing questions, answers, and user authentication.
+
+## 🚀 Tech Stack
+* **Framework:** NestJS (Node.js framework)
+* **ORM:** Prisma
+* **Database:** PostgreSQL
+* **Authentication:** JWT & Bcrypt (or standard auth setup)
+
+---
+
+## ⚙️ Getting Started & Installation
+
+To run this project locally, follow these steps:
+
+### 1. Clone the repository
+\`\`\`bash
+git clone https://github.com/MoHatemTC/round-2-group-3-qna-service-back-end.git
+cd round-2-group-3-qna-service-back-end
+\`\`\`
+
+### 2. Install dependencies
+\`\`\`bash
+npm install
+\`\`\`
+
+### 3. Environment Variables Setup
+Create a `.env` file in the root directory and add your database connection string and secrets:
+\`\`\`env
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+PORT=3000
+\`\`\`
+
+### 4. Run Prisma Migrations / Push Schema
+\`\`\`bash
+npx prisma db push
+\`\`\`
+
+### 5. Run the Application
+\`\`\`bash
+# development
+npm run start
+
+# watch mode
+npm run start:dev
+\`\`\`
+
+---
+
+## 📌 API Endpoints (Auth & Core)
+
+### Authentication
+* **Register a new user:**
+  * **POST** `/auth/register`
+  * **Body:** 
+    \`\`\`json
+    {
+      "email": "user@example.com",
+      "password": "yourpassword"
+    }
+    \`\`\`
+
+---
+
+## 👥 Contributors
+* Abdelrahman Sameh
+* Team Members / Group 3
