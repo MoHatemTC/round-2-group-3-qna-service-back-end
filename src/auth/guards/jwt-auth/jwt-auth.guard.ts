@@ -1,4 +1,5 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -7,9 +8,15 @@ export class JwtAuthGuard implements CanActivate {
     const authHeader = request.headers['authorization'];
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Unauthorized access: Missing or invalid token');
+      throw new UnauthorizedException('Missing or invalid token format');
     }
 
-    return true;
+    const token = authHeader.split(' ')[1];
+    try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET!);      request.user = payload;
+      return true;
+    } catch {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
   }
 }
